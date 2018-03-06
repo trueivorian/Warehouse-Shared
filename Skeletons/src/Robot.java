@@ -4,6 +4,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 import lejos.nxt.Button;
 import lejos.nxt.ButtonListener;
 
+/**
+ * Robot skeleton for other people to work with
+ * @author b1999
+ *
+ */
 public class Robot implements Runnable, ButtonListener{
 	
 	public static final int NORTH = 0;
@@ -21,6 +26,13 @@ public class Robot implements Runnable, ButtonListener{
 	 */
 	private BlockingQueue<Movement> movementQueue;
 	
+	private Integer currentX;
+	private Integer currentY;
+	
+	private Float currentWeight;
+	private Float maxWeight; // Maybe finalise
+	
+	
 	/** 
 	 * Set to true to cancel the current job in progress.
 	 */
@@ -30,6 +42,8 @@ public class Robot implements Runnable, ButtonListener{
 	 * Current direction is degrees.
 	 */
 	private Integer currentDirection;
+	
+	private String robotName;
 	
 	/**
 	 * Takes in the blocking queue from the 
@@ -89,5 +103,45 @@ public class Robot implements Runnable, ButtonListener{
 
 	@Override
 	public void buttonReleased(Button b) {}
+
+	/** 
+	 * As a form a data storage the robot should know the current job its carrying out 
+	 * */
+	public Integer getCurrentJob() {
+		// TODO Auto-generated method stub
+		return 1000;
+	}
+
+	public Integer getCurrentX() {
+		return currentX;
+	}
+
+	public void setCurrentX(Integer currentX) {
+		this.currentX = currentX;
+	}
+
+	public Integer getCurrentY() {
+		return currentY;
+	}
+
+	public void setCurrentY(Integer currentY) {
+		this.currentY = currentY;
+	}
+
+	public Float getCurrentWeight() {
+		return currentWeight;
+	}
+
+	public void setCurrentWeight(Float currentWeight) {
+		this.currentWeight = currentWeight;
+	}
+
+	public Float getMaxWeight() {
+		return maxWeight;
+	}
+
+	public void setMaxWeight(Float maxWeight) {
+		this.maxWeight = maxWeight;
+	}
 	
 }

@@ -24,8 +24,9 @@ public class Item {
 	 */
 	private int y;
 	
-	public Item(Float weight, int x, int y) {
+	public Item(int x, int y, Float weight, Float reward) {
 		this.weight = weight;
+		this.reward = reward;
 		this.x = x;
 		this.y = y;
 	}
