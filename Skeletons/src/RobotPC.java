@@ -9,7 +9,7 @@ import lejos.nxt.ButtonListener;
  * @author b1999
  *
  */
-public class Robot implements Runnable, ButtonListener{
+public class RobotPC implements Runnable, ButtonListener{
 	
 	public static final int NORTH = 0;
 	public static final int EAST = 90;
@@ -49,7 +49,7 @@ public class Robot implements Runnable, ButtonListener{
 	 * Takes in the blocking queue from the 
 	 * @param movementQueue
 	 */
-	public Robot(BlockingQueue<Movement> movementQueue) {
+	public RobotPC(BlockingQueue<Movement> movementQueue) {
 		this.movementQueue = movementQueue;
 	}
 	

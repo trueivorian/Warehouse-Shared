@@ -29,14 +29,15 @@ public class RobotControlUI extends JFrame {
 
 	private JobDataSore jobDataStore;
 
-	private ArrayList<Robot> robots;
+	private ArrayList<RobotPC> robots;
 
-	public RobotControlUI(JobDataSore jobDataStore, ArrayList<Robot> robots) {
+	public RobotControlUI(JobDataSore jobDataStore, ArrayList<RobotPC> robots) {
 		this.jobDataStore = jobDataStore;
 		this.robots = robots;
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
+		setPreferredSize(new Dimension(500, 500));
 		setTitle(FRAME_TITLE);
 		setVisible(true);
 
@@ -109,9 +110,9 @@ public class RobotControlUI extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		ArrayList<Robot> robots = new ArrayList<Robot>();
-		robots.add(new Robot(new LinkedBlockingQueue<Robot.Movement>()));
-		robots.add(new Robot(new LinkedBlockingQueue<Robot.Movement>()));
+		ArrayList<RobotPC> robots = new ArrayList<RobotPC>();
+		robots.add(new RobotPC(new LinkedBlockingQueue<RobotPC.Movement>()));
+		robots.add(new RobotPC(new LinkedBlockingQueue<RobotPC.Movement>()));
 		RobotControlUI robotUI = new RobotControlUI(new JobDataSore(), robots);
 		/*
 		 * try { //String cheat = new BufferedReader(new
