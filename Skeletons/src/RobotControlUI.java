@@ -1,3 +1,4 @@
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -19,14 +20,29 @@ import javax.swing.SwingConstants;
 import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
 
-public class RobotControlUI extends JFrame {
+public class RobotControlUI extends JFrame implements Runnable {
 
-	private static final long serialVersionUID = 8075642296734150448L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 902776736269552333L;
 
 	private static final String FRAME_TITLE = "Robot Control UI";
 
+	private JPanel jobsPanel;
+	
+	private JPanel activeJobsPanel;
+	private JScrollPane activeScrollPane;
+	private JPanel activeJobsInnerPanel;
+	
+	private JPanel inactiveJobsPanel;
+	private JScrollPane inactiveScrollPane;
+	private JPanel inactiveJobsInnerPanel;
+	
 	private JPanel robotPanel;
 
+	// This will be the JobAssignment class used to get information about the jobs
+	// And will require certain methods to be added to the JobAssignment class
 	private JobDataSore jobDataStore;
 
 	private ArrayList<RobotPC> robots;
@@ -41,72 +57,56 @@ public class RobotControlUI extends JFrame {
 		setTitle(FRAME_TITLE);
 		setVisible(true);
 
-		robotPanel = new JPanel();
-		robotPanel.setLayout(new BoxLayout(robotPanel, BoxLayout.Y_AXIS));
-
-		JPanel jobsPanel = new JPanel(new FlowLayout());
+		jobsPanel = new JPanel(new FlowLayout());
 		jobsPanel.setPreferredSize(new Dimension(250, 500));
 
-		// Finalise label text
-		JLabel activeJobsLabel = new JLabel("Active Jobs");
-		jobsPanel.add(activeJobsLabel);
-		
-		JPanel jobPanel = new JPanel();
-		jobPanel.setLayout(new BoxLayout(jobPanel, BoxLayout.Y_AXIS));
-		
-		for(Job job : jobDataStore.getActiveJobs()) {
+		activeJobsPanel = new JPanel();
+		{
+			activeJobsPanel.setBorder(BorderFactory.createTitledBorder("Active Jobs"));
+			activeJobsPanel.setPreferredSize(new Dimension(250, 200));
+			activeJobsPanel.setLayout(new BoxLayout(activeJobsPanel, BoxLayout.Y_AXIS));
 			
-			
-			
+			activeJobsInnerPanel = new JPanel();
+
+			activeScrollPane = new JScrollPane(activeJobsInnerPanel);
+			activeScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+			activeJobsPanel.add(activeScrollPane);
 		}
-
-		JPanel activeJobsPanel = new JPanel();
-		activeJobsPanel.setPreferredSize(new Dimension(250, 250));
-		activeJobsPanel.setLayout(new BoxLayout(activeJobsPanel, BoxLayout.Y_AXIS));
-	
-		
-		
 		jobsPanel.add(activeJobsPanel);
-		
-		// Finalise label text
-		JLabel inactiveJobsLabel = new JLabel("Inactive Jobs"); // Or jobs to do
-		jobsPanel.add(inactiveJobsLabel);
-		
-		JPanel inactiveJobsPanel = new JPanel();
-		inactiveJobsPanel.setPreferredSize(new Dimension(250, 250));
-		inactiveJobsPanel.setLayout(new BoxLayout(activeJobsPanel, BoxLayout.Y_AXIS));
-		
-		
-		
-		jobsPanel.add(inactiveJobsLabel);
 
-		/*
-		 * Integer i = 0; for (Robot robot : robots) {
-		 * 
-		 * //JLabel robotName = new JLabel(robot.getName()); JLabel robotName = new
-		 * JLabel("Robot " + (i++).toString()); robotPanel.add(robotName);
-		 * 
-		 * JPanel buttonPanel = new JPanel(); buttonPanel.setLayout(new FlowLayout());
-		 * buttonPanel.setPreferredSize(new Dimension(500,80));
-		 * 
-		 * 
-		 * 
-		 * for(Integer jobID : robots.getJobs()) {
-		 * 
-		 * }
-		 * 
-		 * System.out.println("Adding robot"); JobPanel jobPanel = new
-		 * JobPanel(jobDataStore, robot.getCurrentJob()); buttonPanel.add(jobPanel);
-		 * JScrollPane scrollPane = new JScrollPane(buttonPanel);
-		 * scrollPane.setHorizontalScrollBarPolicy(JScrollPane.
-		 * HORIZONTAL_SCROLLBAR_ALWAYS); robotPanel.add(scrollPane);
-		 * 
-		 * }
-		 */
-		add(robotPanel, BorderLayout.CENTER);
+		inactiveJobsPanel = new JPanel();
+		{
+			inactiveJobsPanel.setBorder(BorderFactory.createTitledBorder("Inactive Jobs"));
+			inactiveJobsPanel.setPreferredSize(new Dimension(250, 260));
+			inactiveJobsPanel.setLayout(new BoxLayout(inactiveJobsPanel, BoxLayout.Y_AXIS));
+
+			inactiveJobsInnerPanel = new JPanel();
+
+			inactiveScrollPane = new JScrollPane(inactiveJobsInnerPanel);
+			inactiveScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+			inactiveJobsPanel.add(inactiveScrollPane);
+		}
+		jobsPanel.add(inactiveJobsPanel);
+
+		add(jobsPanel, BorderLayout.WEST);
+
+		robotPanel = new JPanel();
+		{
+			robotPanel.setBorder(BorderFactory.createTitledBorder("Robots"));
+			robotPanel.setPreferredSize(new Dimension(245, 500));
+			robotPanel.setLayout(new BoxLayout(robotPanel, BoxLayout.Y_AXIS));
+		}
+		
+		updateUI();
+		
+		add(robotPanel, BorderLayout.EAST);
 
 		pack();
 
+	}
+	
+	public void updateUI() {
+		
 	}
 
 	public static void main(String[] args) {
@@ -114,25 +114,21 @@ public class RobotControlUI extends JFrame {
 		robots.add(new RobotPC(new LinkedBlockingQueue<RobotPC.Movement>()));
 		robots.add(new RobotPC(new LinkedBlockingQueue<RobotPC.Movement>()));
 		RobotControlUI robotUI = new RobotControlUI(new JobDataSore(), robots);
-		/*
-		 * try { //String cheat = new BufferedReader(new
-		 * InputStreamReader(System.in)).readLine(); } catch (IOException e) { // TODO
-		 * Auto-generated catch block e.printStackTrace(); }
-		 */
+
 	}
 
-	/**
-	 * Prints an error to the text area using the tell() method and prints out the
-	 * error to the console.
-	 * 
-	 * @param message
-	 *            The message to be printed to the text area and console.
-	 */
-	public void error(String message) {
+	@Override
+	public void run() {
+	
+		while(true) {
+			// Maybe set a delay
+			updateUI();
+		}
 	}
-
 }
 
+// Wont take the same form and more
+// Will have cancel button, % complete if it is an active job and JobID
 class JobPanel extends JPanel {
 
 	private static final long serialVersionUID = -6584237164987663902L;
